@@ -29,7 +29,7 @@ EnergyPro è un progetto scolastico nato all'interno dell'**ITIS P. Hensemberger
 ## 🌐 Funzionalità Principali
 
 - 🔍 **Confronto diretto tra province**
-- 🗺️ **Visualizzazione geografica** su mappa interattiva
+- 🗺️ **Visualizzazione geografica** su mappa interattiva `Folium`
 - 📊 **Grafici dinamici** e aggiornati con `Plotly`
 - 🎮 **Minigioco educativo** integrato
 - 👥 **Team dedicato** di studenti sviluppatori e data analyst
