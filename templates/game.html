@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnergyPro - Minigame</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0b84ff;
+            --secondary-color: #333;
+            --header-bg: #1e1e20;
+            --background-dark: #1c1c1e;
+            --background-card: #2c2c2e;
+            --text-light: #ffffff;
+            --text-secondary: #9e9e9e;
+            --accent-green: #30d158;
+            --accent-color: #5cdb95;
+            --gradient-start: #007bff;
+            --gradient-end: #5cdb95;
+            --animation-timing: 0.3s;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+       
+        ::-webkit-scrollbar-track {
+            background: var(--background-dark);
+        }
+       
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--gradient-start), var(--gradient-end));
+            border-radius: 10px;
+        }
+       
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--gradient-end), var(--gradient-start));
+        }
+
+        /* Header & Navbar */
+        header {
+            background-color: var(--header-bg);
+            color: #ffffff;
+            padding: 10px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+       
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+       
+        .logo-image {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+            background: linear-gradient(90deg, #ffffff, var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+       
+        .subtitle {
+            font-size: 1rem;
+            font-weight: lighter;
+            opacity: 0.8;
+            margin: 0;
+            color: #e0e0e0;
+        }
+       
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+       
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            color: var(--gradient-end)
+        }
+
+        .minigame {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .minigame:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            color: white;
+            box-shadow:  0 0px 10px #00bfff;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 140px);
+            padding: 20px;
+            gap: 30px;
+        }
+
+        .game-wrapper {
+            background: var(--background-card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 900px;
+        }
+
+        .author {
+            color: var(--text-secondary);
+        }
+
+        .author a {
+            color: orange;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .author a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: orange;
+            transition: width 0.3s ease;
+        }
+
+        .author a:hover::after {
+            width: 100%;
+        }
+
+        .info-panel {
+            background: var(--background-card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 320px;
+        }
+
+        .company-info {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--header-bg);
+            border-radius: 15px;
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .company-info h3 {
+            margin: 0 0 15px 0;
+            color: var(--accent-green);
+            font-size: 1.3rem;
+        }
+
+        .company-info p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .mission-statement {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .mission-statement h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--header-bg);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-green);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .objectives-list {
+            background: var(--header-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 26px;
+        }
+
+        .objectives-list h4 {
+            margin: 0 0 15px 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .objective-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .objective-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--header-bg);
+            border-radius: 15px;
+            animation: bounceIn 0.8s ease-out 0.3s both;
+            gap: 20px;
+        }
+
+        .stat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-label {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-bar-container {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-bar {
+            height: 100%;
+            border-radius: 12px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        .health-bar {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a52);
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+        }
+
+        .energy-bar {
+            background: linear-gradient(90deg, var(--accent-green), #28a745);
+            box-shadow: 0 0 10px rgba(48, 209, 88, 0.4);
+        }
+
+        .level-bar {
+            background: linear-gradient(90deg, var(--primary-color), #4a90e2);
+            box-shadow: 0 0 10px rgba(11, 132, 255, 0.4);
+        }
+
+        .stat-values {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            z-index: 2;
+        }
+
+        .health-label { color: #ff6b6b; }
+        .energy-label { color: var(--accent-green); }
+        .level-label { color: var(--primary-color); }
+
+        .health-bar.critical {
+            animation: pulse-critical 0.8s ease-in-out infinite;
+        }
+
+        .energy-bar.full {
+            animation: glow-energy 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-critical {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+            }
+            50% { 
+                opacity: 0.7;
+                box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+            }
+        }
+
+        @keyframes glow-energy {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(48, 209, 88, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(48, 209, 88, 0.8);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .game-grid {
+            width: 800px;
+            height: 800px;
+            background: var(--background-dark);
+            border: 3px solid var(--primary-color);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .grid-cell {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .player {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all var(--animation-timing) ease;
+            border: 2px solid var(--text-light);
+            box-shadow: 0 0 15px rgba(11, 132, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .solar-panel {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            border-radius: 5px;
+            transition: all var(--animation-timing) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .solar-panel:hover {
+            animation: glow-solar 2s ease-in-out infinite alternate;
+            cursor: pointer;
+        }
+
+        .hydro-turbine {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #00bfff, #1e90ff);
+            transition: all var(--animation-timing) ease;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .hydro-turbine:hover {
+            cursor:pointer;
+            border-radius: 50%;
+            animation: spin 1s ease infinite;
+        }
+
+        .factory {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #8b0000, #dc143c);
+            border-radius: 3px;
+            transition: all var(--animation-timing) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .factory:hover {
+            cursor: pointer;
+            animation: pulse-danger 2s ease infinite;
+        }
+
+        .pollution {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #555, #333);
+            border-radius: 50%;
+            transition: all var(--animation-timing) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .pollution:hover {
+            cursor: pointer;
+            animation: float 1s ease-in-out infinite alternate;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            display: none;
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform var(--animation-timing) ease;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes glow-solar {
+            from { box-shadow: 0 0 10px #ffd700; }
+            to { box-shadow: 0 0 20px #ffd700, 0 0 30px #ff8c00; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-danger {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes float {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-5px); }
+        }
+                .footer {
+            background-color: var(--header-bg);
+            color: #FFFFFE;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+
+
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+
+
+
+        .footer-main {
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+
+
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+
+
+
+        .logo-image-footer {
+            height: 2rem;
+            width: auto;
+        }
+
+
+
+
+        .footer-text {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+
+
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+
+
+
+        .section-title-f {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #5cdb95;
+        }
+
+
+
+
+        .section-title-f i {
+            color: var(--gradient-start);
+        }
+
+
+
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+
+
+
+        .team-member-f {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FFFFFE;
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+
+
+
+        .team-member-f:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+
+
+
+        .team-member-f i {
+            color: #5cdb95;
+        }
+
+
+
+
+        .resources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+
+
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FFFFFE;
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            background: linear-gradient(135deg, rgba(92, 219, 149, 0.2), rgba(22, 40, 141, 0.2));
+            border-left: 3px solid #5cdb95;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+
+
+
+        .resource-link:hover {
+            background: linear-gradient(135deg, rgba(92, 219, 149, 0.3), rgba(22, 40, 141, 0.3));
+            transform: translateX(5px);
+        }
+
+
+
+
+        .resource-link i {
+            color: #5cdb95;
+            font-size: 1.1rem;
+        }
+
+
+
+
+        .footer-credit {
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+
+
+
+        .footer-credit a {
+            color: var(--accent-color);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+
+
+
+        .footer-credit a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+
+
+
+        .footer-credit p a:hover::after {
+            width: 100%;
+        }
+
+
+
+
+        @media (min-width: 992px) {
+            .footer-container {
+                grid-template-columns: 1.5fr 1fr 1fr;
+            }
+           
+            .footer-main {
+                grid-column: span 1;
+                text-align: left;
+                border-bottom: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.1);
+                padding-right: 1.5rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+           
+            .footer-logo {
+                justify-content: flex-start;
+            }
+           
+            .footer-credit {
+                grid-column: span 3;
+            }
+        }
+
+
+
+
+        @keyframes glow-solar {
+            from { box-shadow: 0 0 10px #ffd700; }
+            to { box-shadow: 0 0 20px #ffd700, 0 0 30px #ff8c00; }
+        }
+
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+
+        @keyframes pulse-danger {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+
+        @keyframes float {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}" class="logo-container">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo EnergyPro" class="logo-image">
+            </div>
+            <div>
+                <h1 class="brand-name">EnergyPro</h1>
+                <p class="subtitle">Confronto Energie Rinnovabili per Province</p>
+            </div>
+        </a>
+        <nav>
+            <a href="{{ url_for('index') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                    <line x1="8" y1="2" x2="8" y2="18"></line>
+                    <line x1="16" y1="6" x2="16" y2="22"></line>
+                </svg>
+                Mappa
+            </a>
+            <a href="{{ url_for('about') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>    
+                About us
+            </a>
+            <a href="{{ url_for('game') }}" class="minigame">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    viewBox="0 0 24 24">
+                    <rect x="2" y="6" width="20" height="12" rx="4" ry="4"></rect>
+                    <path d="M6 12h4m-2-2v4"></path>
+                    <circle cx="16.5" cy="12" r="1"></circle>
+                </svg>
+                    
+                Minigame
+            </a>
+        </nav>
+    </header>
+
+    <div class="game-container">
+        <div class="info-panel">
+            <div class="company-info">
+                <h3>🏢 EnergyPro Solutions</h3>
+                <p>Specializzati nella raccolta e analisi di dati per l'ottimizzazione delle energie rinnovabili in tutta Italia.</p>
+            </div>
+
+            <div class="mission-statement">
+                <h4>🎯 La Nostra Missione</h4>
+                <p>Accelerare la transizione energetica italiana attraverso dati e tecnologia</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEnergy">0</div>
+                    <div class="stat-label">MW Raccolti</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="efficiencyRate">0%</div>
+                    <div class="stat-label">Efficienza</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="co2Saved">0</div>
+                    <div class="stat-label">CO₂ Evitata</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="gameTime">0:00</div>
+                    <div class="stat-label">Tempo</div>
+                </div>
+            </div>
+
+            <div class="objectives-list">
+                <h4>📋 Obiettivi Strategici</h4>
+                <div class="objective-item">
+                    <span class="objective-icon">☀️</span>
+                    <span class="objective-text">Installare pannelli solari (+15 MW)</span>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">💧</span>
+                    <span class="objective-text">Attivare turbine idroelettriche (+20 MW)</span>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">🏭</span>
+                    <span class="objective-text">Evitare fabbriche inquinanti (-25 salute)</span>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">☁️</span>
+                    <span class="objective-text">Evitare emissioni CO₂ (-15 salute)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-wrapper">
+            <div class="game-info">
+                <div class="stat-container">
+                    <div class="stat-label energy-label">
+                        <span>⚡</span>
+                        <span>Energia</span>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar energy-bar" id="energyBar">
+                            <div class="stat-values" id="energyValue">0 MW</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-container">
+                    <div class="stat-label health-label">
+                        <span>❤️</span>
+                        <span>Salute Ambientale</span>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar health-bar" id="healthBar">
+                            <div class="stat-values" id="healthValue">100%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-container">
+                    <div class="stat-label level-label">
+                        <span>🏆</span>
+                        <span>Livello</span>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar level-bar" id="levelBar">
+                            <div class="stat-values" id="levelValue">1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="game-grid" id="gameGrid">
+                <div class="player" id="player">🧑‍💼</div>
+               
+                <div class="game-over" id="gameOver">
+                    <h2>Game Over!</h2>
+                    <p>L'inquinamento ha vinto questa volta...</p>
+                    <p>Energia raccolta: <span id="finalScore">0</span> MW</p>
+                    <button class="restart-btn" onclick="restartGame()">🔄 Riprova</button>
+                </div>
+            </div>
+           
+            <div class="controls">
+                <p>☀️ Raccogli pannelli solari • 💧 Raccogli turbine idroelettriche</p>
+                <p>⚠️ Evita fabbriche e inquinamento!</p>
+            </div>
+
+            <div class="author">
+                powered by: <a href="#team">Federico Santini</a>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="footer-container">
+        <!-- Main Footer Content -->
+        <div class="footer-main">
+            <div class="footer-logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo-image-footer">
+                <span>EnergyPro</span>
+            </div>
+            <div class="logo-image-text">© 2025 EnergyPro – Confronto Energie Rinnovabili tra Province Italiane</div>
+        </div>
+
+
+
+
+        <!-- Team Section -->
+        <div class="footer-section">
+            <h3 class="section-title-f"><i class="fas fa-users"></i> Team</h3>
+            <div class="team-grid">
+                <a href="{{ url_for('team_santini') }}" class="team-member-f">
+                    <i class="fas fa-code"></i> Federico Santini
+                </a>
+                <a href="{{ url_for('team_chiapparino') }}" class="team-member-f">
+                    <i class="fas fa-chart-bar"></i> Claudio Chiapparino
+                </a>
+                <a href="{{ url_for('team_montanari') }}" class="team-member-f">
+                    <i class="fas fa-chart-bar"></i> Alessandro Montanari
+                </a>
+                <a href="{{ url_for('team_panora') }}" class="team-member-f">
+                    <i class="fas fa-code"></i> Jhon Panora
+                </a>
+            </div>
+        </div>
+
+
+
+
+        <!-- Resources Section -->
+        <div class="footer-section">
+            <h3 class="section-title-f"><i class="fas fa-plug"></i> Risorse</h3>
+            <div class="resources-list">
+                <a href="https://overpass-turbo.eu/" target="_blank" class="resource-link">
+                    <i class="fas fa-network-wired"></i> Overpass API
+                </a>
+                <a href="{{ url_for('return_cities') }}" class="resource-link">
+                    <i class="fas fa-database"></i> Dataset delle Province
+                </a>
+               
+            </div>
+        </div>
+
+
+
+
+        <!-- Credit Line -->
+        <div class="footer-credit">
+            <i class="fas fa-school"></i> Progetto Scolastico <a href="https://hensemberger.edu.it/" target="_blank" > ITI P. Hensemberger di Monza</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+class EcoGridGame {
+    constructor() {
+        this.gridSize = 20;
+        this.cellSize = 40;
+        this.player = { x: 10, y: 10 };
+        this.score = 0;
+        this.health = 100;
+        this.level = 1;
+        this.startTime = Date.now();
+        this.totalEnergy = 0;
+        this.co2Saved = 0;
+        this.gameRunning = true;
+        this.spawnRate = 0.07;
+
+        // Inizializza griglia di occupazione
+        this.grid = Array.from({ length: this.gridSize }, () => Array(this.gridSize).fill(null));
+        this.grid[this.player.x][this.player.y] = 'player';
+        this.gameItems = {};
+
+        this.initGame();
+        this.bindEvents();
+        this.gameLoop();
+        this.statsLoop();
+    }
+
+    initGame() {
+        this.updatePlayer();
+        this.updateUI();
+    }
+
+    bindEvents() {
+        document.addEventListener('keydown', e => {
+            if (!this.gameRunning) return;
+            const key = e.key.toLowerCase();
+            if (['w','a','s','d'].includes(key)) {
+                let dx = 0, dy = 0;
+                if (key === 'w') dy = -1;
+                if (key === 's') dy = 1;
+                if (key === 'a') dx = -1;
+                if (key === 'd') dx = 1;
+                this.movePlayer(dx, dy);
+            }
+        });
+    }
+
+    movePlayer(dx, dy) {
+        if (!dx && !dy) return;
+        const oldX = this.player.x;
+        const oldY = this.player.y;
+        const newX = Math.max(0, Math.min(this.gridSize - 1, oldX + dx));   //per controllare se lo user esce dalla griglia
+        const newY = Math.max(0, Math.min(this.gridSize - 1, oldY + dy));
+        if (oldX === newX && oldY === newY) return;
+
+        this.grid[oldX][oldY] = null;
+
+        this.player.x = newX;
+        this.player.y = newY;
+        this.updatePlayer();
+
+        this.checkCollisions();
+
+        this.grid[this.player.x][this.player.y] = 'player';
+    }
+
+    updatePlayer() {
+        const el = document.getElementById('player');
+        el.style.left = `${this.player.x * this.cellSize}px`;
+        el.style.top  = `${this.player.y * this.cellSize}px`;
+    }
+
+    statsLoop() {
+        if (!this.gameRunning) return;
+        
+        this.updateUI();
+
+        // Calcola tempo trascorso
+        const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+        const minuti = Math.floor(elapsed / 60);
+        const secondi = String(elapsed % 60).padStart(2, '0');
+
+        // Aggiorna le statistiche nel pannello
+        document.getElementById('totalEnergy').textContent = this.totalEnergy;
+        document.getElementById('efficiencyRate').textContent = this.health + '%';
+        document.getElementById('co2Saved').textContent = this.co2Saved + 't';
+        document.getElementById('gameTime').textContent = `${minuti}:${secondi}`;
+
+        // Chiamata ricorsiva ogni secondo
+        setTimeout(() => this.statsLoop(), 1000);
+    }
+
+    spawnItem() {
+        if (Math.random() >= this.spawnRate) return;
+
+        const x = Math.floor(Math.random() * this.gridSize);
+        const y = Math.floor(Math.random() * this.gridSize);
+        // Se cella occupata skip
+        if (this.grid[x][y]) return;
+
+        const types = [
+            { type: 'solar', icon: '☀️', value: 15, damage: 0 },
+            { type: 'hydro', icon: '💧', value: 20, damage: 0 },
+            { type: 'factory', icon: '🏭', value: 0, damage: 25 },
+            { type: 'pollution', icon: '☁️', value: 0, damage: 15 }
+        ];
+
+
+        //ask to chat
+        const weights = [30, 25, 25, 20];
+        let r = Math.random() * weights.reduce((a,b) => a+b, 0);
+        let idx = 0;
+        for (; idx < weights.length; idx++) {
+            if (r < weights[idx]) break;
+            r -= weights[idx];
+        }
+        const cfg = types[idx] || types[0];
+
+        const id = `i${Date.now()}${Math.random()}`;
+        const item = { id, ...cfg, x, y };
+        this.gameItems[id] = item;
+        this.grid[x][y] = id;
+        this.renderItem(item);
+    }
+
+    renderItem(item) {
+        const el = document.createElement('div');
+        el.id = item.id;
+        el.className = item.type === 'solar' ? 'solar-panel'
+            : item.type === 'hydro' ? 'hydro-turbine'
+            : item.type === 'factory' ? 'factory'
+            : 'pollution';
+        el.textContent = item.icon;
+        el.style.left = `${item.x * this.cellSize}px`;
+        el.style.top  = `${item.y * this.cellSize}px`;
+        document.getElementById('gameGrid').appendChild(el);
+    }
+
+    checkCollisions() {
+        const cellKey = this.grid[this.player.x][this.player.y];
+        if (!cellKey || cellKey === 'player') return;
+
+        const item = this.gameItems[cellKey];
+        if (!item) return;
+
+        this.score += item.value;
+        this.health -= item.damage;
+        if (item.value) {
+            this.totalEnergy += item.value;
+            this.co2Saved += Math.floor(item.value * 0.5);
+        }
+
+        // Rimuovi da DOM e griglia
+        document.getElementById(item.id).remove();
+        delete this.gameItems[cellKey];
+        this.grid[this.player.x][this.player.y] = null;
+
+        if (item.value) this.createParticleEffect(item.x, item.y, item.type);
+
+        this.updateUI();
+        this.checkGameOver();
+        this.checkLevelUp();
+    }
+
+    createParticleEffect(x, y, type) {
+        const colors = type === 'solar' ? ['#ffd700','#ff8c00'] : ['#00bfff','#1e90ff'];
+        for (let i=0; i<5; i++) {
+            const p = document.createElement('div');
+            Object.assign(p.style, {
+                position: 'absolute', width: '4px', height: '4px',
+                background: colors[Math.floor(Math.random()*2)],
+                borderRadius: '50%', left: `${x*this.cellSize+15}px`, top: `${y*this.cellSize+15}px`,
+                pointerEvents: 'none', zIndex: '1000'
+            });
+            document.getElementById('gameGrid').appendChild(p);
+            const dx = (Math.random()-0.5)*50, dy = (Math.random()-0.5)*50;
+            p.animate([{ transform: 'translate(0,0)', opacity:1 },
+                       { transform: `translate(${dx}px,${dy}px)`, opacity:0 }],
+                      { duration:500, easing:'ease-out' })
+             .onfinish = () => p.remove();
+        }
+    }
+
+updateUI() {
+    // Aggiorna le barre grafiche se esistono
+    const energyBar = document.getElementById('energyBar');
+    const healthBar = document.getElementById('healthBar');
+    const levelBar = document.getElementById('levelBar');
+    
+    if (energyBar && healthBar && levelBar) {
+        // Aggiorna energia
+        const energyValue = document.getElementById('energyValue');
+        energyBar.style.width = `${Math.min(100, (this.score / 500) * 100)}%`;
+        if (energyValue) energyValue.textContent = `${this.score} MW`;
+        
+        if (this.score >= 400) {
+            energyBar.classList.add('full');
+        } else {
+            energyBar.classList.remove('full');
+        }
+
+        // Aggiorna salute
+        const healthPercent = Math.max(0, this.health);
+        const healthValue = document.getElementById('healthValue');
+        
+        healthBar.style.width = `${healthPercent}%`;
+        if (healthValue) healthValue.textContent = `${Math.max(0, this.health)}%`;
+        
+        if (this.health <= 25) {
+            healthBar.classList.add('critical');
+        } else {
+            healthBar.classList.remove('critical');
+        }
+
+        // Aggiorna livello
+        const currentLevelProgress = this.score % 100;
+        const levelPercent = (currentLevelProgress / 100) * 100;
+        const levelValue = document.getElementById('levelValue');
+        
+        levelBar.style.width = `${levelPercent}%`;
+        if (levelValue) levelValue.textContent = `${this.level}`;
+    }
+    
+    // Rimuovi i riferimenti agli elementi che non esistono
+    // document.getElementById('score').textContent = this.score;
+    // document.getE
+    }
+    checkGameOver() {
+        if (this.health <= 0) {
+            this.gameRunning = false;
+            document.getElementById('finalScore').textContent = this.score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+    }
+
+    checkLevelUp() {
+        const newLvl = Math.floor(this.score / 200) + 1;
+        if (newLvl > this.level) {
+            this.level = newLvl;
+            this.spawnRate += 0.03;
+            this.health = Math.min(100, this.health + 20);
+            this.showMessage(`🎉 Livello ${this.level}! Difficoltà aumentata!`);
+        }
+    }
+
+    showMessage(text) {
+        const msg = document.createElement('div');
+        Object.assign(msg.style, {
+            position:'absolute', top:'50px', left:'50%', transform:'translateX(-50%)',
+            background:'rgba(11,132,255,0.9)', color:'#fff', padding:'10px 20px', borderRadius:'20px',
+            zIndex:'1000', fontSize:'1.1rem', fontWeight:'bold'
+        });
+        msg.textContent = text;
+        document.getElementById('gameGrid').appendChild(msg);
+        setTimeout(() => msg.remove(), 2000);
+    }
+
+    gameLoop() {
+        if (!this.gameRunning) return;
+        this.spawnItem();
+        setTimeout(() => this.gameLoop(), 50);
+    }
+}
+
+function restartGame() {
+    const grid = document.getElementById('gameGrid');
+    grid.querySelectorAll('div:not(#player):not(.game-over)').forEach(el => el.remove());
+    document.getElementById('gameOver').style.display = 'none';
+    window.game = new EcoGridGame();
+}
+
+window.game = new EcoGridGame();
+
+
+    </script>
+</body>
+</html>
