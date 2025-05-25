@@ -847,10 +847,11 @@
                     Prima provincia:
                 </div>
                 <select name="city1">
-                    {% for c in cities %}
-                        <option value="{{ c.nome }}" {% if c.nome == 'Agrigento' %}selected{% endif %} {% if c.nome == sel1 %}selected{% endif %}><b>{{ c.nome }}</b> ({{c.sigla}})</option>
+                    {% for p in provinces %}
+                        <option value="{{ p.nome }}" {% if p.nome == 'Agrigento' %}selected{% endif %} {% if p.nome == sel1 %}selected{% endif %}><b>{{ p.nome }}</b> ({{ p.sigla }})</option>
                     {% endfor %}
                 </select>
+
             </label>
             <label>
                 <div class="label-icon">
@@ -863,10 +864,11 @@
                     Seconda provincia:
                 </div>
                 <select name="city2">
-                    {% for c in cities %}
-                        <option value="{{ c.nome }}" {% if c.nome == 'Alessandria' %}selected{% endif %} {% if c.nome == sel2 %}selected{% endif %}><b>{{ c.nome }}</b> ({{c.sigla}})</option>
+                    {% for p in provinces %}
+                        <option value="{{ p.nome }}" {% if p.nome == 'Agrigento' %}selected{% endif %} {% if p.nome == sel1 %}selected{% endif %}><b>{{ p.nome }}</b> ({{ p.sigla }})</option>
                     {% endfor %}
                 </select>
+
             </label>
             <button type="submit">
                 Confronta
@@ -977,7 +979,7 @@
                 <a href="https://overpass-turbo.eu/" target="_blank" class="resource-link">
                     <i class="fas fa-network-wired"></i> Overpass API
                 </a>
-                <a href="{{ url_for('return_cities') }}" class="resource-link">
+                <a href="{{ url_for('return_provinces') }}" class="resource-link">
                     <i class="fas fa-database"></i> Dataset delle Province
                 </a>
             </div>

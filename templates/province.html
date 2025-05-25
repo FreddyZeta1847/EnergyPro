@@ -662,25 +662,25 @@
         
         <div class="cities-grid" id="citiesContainer">
             <!-- Cities will be rendered here -->
-            {% for c in cities %}
+            {% for p in provinces %}
             <div class="city-card">
                 <div class="city-info">
                     <div class="city-name">
-                        <span>{{ c.nome }}</span>
-                        <span class="city-province">{{ c.sigla }}</span>
+                        <span>{{ p.nome }}</span>
+                        <span class="city-province">{{ p.sigla }}</span>
                     </div>
                     <div class="city-details">
                         <div class="detail-item">
                             <span class="detail-label">Latitudine</span>
-                            <span class="detail-value">{{ c.lat }}°</span>
+                            <span class="detail-value">{{ p.lat }}°</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Longitudine</span>
-                            <span class="detail-value">{{ c.lon }}°</span>
+                            <span class="detail-value">{{ p.lon }}°</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Copertura</span>
-                            <span class="detail-value">{{ c.radius / 1000 }} km</span>
+                            <span class="detail-value">{{ p.radius / 1000 }} km</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Mappata</span>
@@ -734,7 +734,7 @@
                 <a href="https://overpass-turbo.eu/" target="_blank" class="resource-link">
                     <i class="fas fa-network-wired"></i> Overpass API
                 </a>
-                <a href="{{ url_for('return_cities') }}" class="resource-link">
+                <a href="{{ url_for('return_provinces') }}" class="resource-link">
                     <i class="fas fa-database"></i> Dataset delle Province
                 </a>
             </div>

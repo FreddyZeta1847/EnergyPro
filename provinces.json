@@ -1,5 +1,5 @@
 {  
-  "cities": [
+  "provinces": [
       { "nome": "Agrigento", "sigla": "AG", "lat": 37.3000, "lon": 13.6000, "radius": 20000 },
       { "nome": "Alessandria", "sigla": "AL", "lat": 44.9167, "lon": 8.6167, "radius": 20000 },
       { "nome": "Ancona", "sigla": "AN", "lat": 43.6167, "lon": 13.5167, "radius": 10000 },

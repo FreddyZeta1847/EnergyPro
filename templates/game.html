@@ -1045,7 +1045,7 @@
                 <a href="https://overpass-turbo.eu/" target="_blank" class="resource-link">
                     <i class="fas fa-network-wired"></i> Overpass API
                 </a>
-                <a href="{{ url_for('return_cities') }}" class="resource-link">
+                <a href="{{ url_for('return_provinces') }}" class="resource-link">
                     <i class="fas fa-database"></i> Dataset delle Province
                 </a>
                
@@ -1297,7 +1297,7 @@ updateUI() {
     }
 
     checkLevelUp() {
-        const newLvl = Math.floor(this.score / 200) + 1;
+        const newLvl = Math.floor(this.score / 100) + 1;
         if (newLvl > this.level) {
             this.level = newLvl;
             this.spawnRate += 0.03;
